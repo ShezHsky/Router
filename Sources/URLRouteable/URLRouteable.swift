@@ -1,0 +1,73 @@
+import Foundation.NSURL
+import RouterCore
+
+/// A `Routeable` type represented by an underlying `URL`.
+///
+/// Instances of `Routeable` types using `URL`s is fairly common, especially for apps that support universal links.
+/// Clients should subclass this type and supply a series of `Routeable` types that can be initialized using `URL`s.
+/// Later, instantiating the subclass with a `URL` will attempt to yield the corresponding `Routeable` when provided
+/// to a router.
+///
+///```
+/// class AppURLRouteable: URLRouteable {
+///     override func registerRouteables() {
+///         registerNotification(AppRouteable.self) // where AppRouteable conforms to Routeable & ExpressibleByURL
+///     }
+/// }
+/// ```
+///
+/// - Note:
+/// If your app submits a URL that cannot be decoded into a representitive routeable, this type will instead yield
+/// a `UnknownURLRouteable`. Your app may configure a route to handle this type in order to alert the user that the
+/// content could not be found.
+open class URLRouteable: ExternallyRepresentedRouteable<URL> {
+    
+    /// Registers a new `Routeable` for later yielding by this type.
+    /// - Parameter type: A type that conforms to the `ExpressibleByURL` and `Routeable` protocols. This type will later
+    ///                   be instantiated on demand when a matching `URL` is supplied to this routeable.
+    public func registerURL<T>(_ type: T.Type) where T: Routeable & ExpressibleByURL {
+        register(Proxy<T>.self)
+    }
+    
+    open override func failedToYieldRouteable(to recipient: YieldedRouteableRecipient) {
+        recipient.receive(UnknownURLRouteable(url: representitiveValue))
+    }
+    
+    public final override func equals(_ other: ExternallyRepresentedRouteable<URL>) -> Bool {
+        representitiveValue == other.representitiveValue
+    }
+    
+    fileprivate struct Proxy<T> where T: Routeable & ExpressibleByURL {
+        
+        let routeable: T
+        
+    }
+    
+}
+
+// MARK: - URLRouteable.Proxy + ExpressibleByExternalRepresentation
+
+extension URLRouteable.Proxy: ExpressibleByExternalRepresentation {
+    
+    typealias Representation = URL
+    
+    init?(representitiveValue: URL) {
+        guard let routeable = T(url: representitiveValue) else { return nil }
+        self.routeable = routeable
+    }
+    
+}
+
+// MARK: - URLRouteable.Proxy + Routeable
+
+extension URLRouteable.Proxy: Routeable { }
+
+// MARK: - URLRouteable.Proxy + YieldsRouteable
+
+extension URLRouteable.Proxy: YieldsRoutable {
+    
+    func yield(to recipient: YieldedRouteableRecipient) {
+        recipient.receive(routeable)
+    }
+    
+}
