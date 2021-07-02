@@ -6,7 +6,6 @@ import UserActivityRouteable
 import XCTest
 import XCTRouter
 
-@available(iOS 10.0, *, macOS 11.0, *, watchOS 3.2, *, tvOS 14.0, *)
 class UserActivityRouteableTests: XCTestCase {
     
     func testEqualityByActivityInstance() {

@@ -1,7 +1,6 @@
 import IntentRouteable
 import RouterCore
 
-@available(iOS 10.0, *, macOS 11.0, *, watchOS 3.2, *, tvOS 14.0, *)
 extension UserActivityRouteable {
     
     /// Registers an `IntentRouteable` for later yielding by this type.

@@ -5,6 +5,7 @@ import PackageDescription
 let package = Package(
     name: "Router",
     defaultLocalization: "en",
+    platforms: [.iOS(.v10), .macOS(.v11), .watchOS(.v4), .tvOS(.v14)],
     products: [
         // The full Router package
         .library(name: "Router", targets: [
