@@ -1,3 +1,4 @@
+#if swift(>=5.3)
 /// A result builder used to formulate the routing DSL.
 ///
 /// The router DSL provides a straightforward way to construct the routing system of your app in a more developer
@@ -35,7 +36,12 @@
 ///
 /// You may define your own language as part of the DSL by declaring types that conform to the `RouteProvider` protocol.
 ///
-@resultBuilder public struct RoutesBuilder {
+@resultBuilder public struct RoutesBuilder { }
+#else
+@_functionBuilder public struct RoutesBuilder { }
+#endif
+
+extension RoutesBuilder {
     
     public static func buildBlock(_ components: RouteProvider ...) -> Routes {
         Routes(providers: components)
