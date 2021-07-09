@@ -23,17 +23,7 @@ class URLRouteableTests: XCTestCase {
         let recipient = CapturingRouteableRecipient()
         routeable.recursivleyYield(to: recipient)
         
-        let expected = try XCTUnwrap(CreatesItselfFromAnyURL(url: url))
-        XCTAssertEqual(expected.eraseToAnyRouteable(), recipient.erasedRoutedContent)
-    }
-    
-    func testTypeThatParsesOneComponentFromURL() throws {
-        let url = try XCTUnwrap(URL(string: "https://www.google.co.uk/search?q=Hello"))
-        let routeable = TestingURLRouteable(url)
-        let recipient = CapturingRouteableRecipient()
-        routeable.recursivleyYield(to: recipient)
-        
-        let expected = CreatesItselfUsingOneParameterFromURL(context: "Hello")
+        let expected = try XCTUnwrap(CreatesItselfByManuallyDecodingURL(url: url))
         XCTAssertEqual(expected.eraseToAnyRouteable(), recipient.erasedRoutedContent)
     }
     
@@ -43,7 +33,7 @@ class URLRouteableTests: XCTestCase {
         let recipient = CapturingRouteableRecipient()
         routeable.recursivleyYield(to: recipient)
         
-        let expected = CreatesItselfUsingTwoParametersFromURL(firstCaptureGroup: "Hello", secondCaptureGroup: 1)
+        let expected = CreatesItselfByDecodingURL(firstCaptureGroup: "Hello", secondCaptureGroup: 1)
         
         XCTAssertEqual(expected.eraseToAnyRouteable(), recipient.erasedRoutedContent)
     }
@@ -64,14 +54,13 @@ class URLRouteableTests: XCTestCase {
         override func registerRouteables() {
             super.registerRouteables()
             
-            registerURL(CreatesItselfUsingTwoParametersFromURL.self)
-            registerURL(CreatesItselfUsingOneParameterFromURL.self)
-            registerURL(CreatesItselfFromAnyURL.self)
+            registerURL(CreatesItselfByDecodingURL.self)
+            registerURL(CreatesItselfByManuallyDecodingURL.self)
         }
         
     }
     
-    private struct CreatesItselfFromAnyURL: Routeable, ExpressibleByURL {
+    private struct CreatesItselfByManuallyDecodingURL: Routeable, ExpressibleByURL {
         
         var url: URL
         
@@ -81,21 +70,7 @@ class URLRouteableTests: XCTestCase {
         
     }
     
-    private struct CreatesItselfUsingOneParameterFromURL: Decodable, Routeable {
-        
-        private enum CodingKeys: String, CodingKey {
-            case context = "q"
-        }
-        
-        var context: String
-        
-        init(context: String) {
-            self.context = context
-        }
-        
-    }
-    
-    private struct CreatesItselfUsingTwoParametersFromURL: Decodable, Routeable {
+    private struct CreatesItselfByDecodingURL: Decodable, Routeable {
         
         private enum CodingKeys: String, CodingKey {
             case firstCaptureGroup = "q"
