@@ -23,13 +23,18 @@ import URLDecoder
 /// content could not be found.
 open class URLRouteable: ExternallyRepresentedRouteable<URL> {
     
-    /// Registers a new `Routeable` for later yielding by this type.
+    /// Registers a new `Routeable` for later yielding by this type, where the type unwraps itself from a `URL`.
     /// - Parameter type: A type that conforms to the `ExpressibleByURL` and `Routeable` protocols. This type will later
     ///                   be instantiated on demand when a matching `URL` is supplied to this routeable.
     public func registerURL<T>(_ type: T.Type) where T: Routeable & ExpressibleByURL {
         register(Proxy<T>.self)
     }
     
+    /// Registers a new `Routeable` for later yielding by this type, in which the type can be decoded from a `URL`
+    /// through its conformance to the `Decodable` protocol.
+    /// - Parameter type: A type that conforms to the `Decodable` and `Routeable` protocols. This type will later be
+    ///                   instantiated on demand by decoding the inbound `URL` via the types `init(decoder:)`
+    ///                   implementation (synthesized or otherwise).
     public func registerURL<T>(_ type: T.Type) where T: Routeable & Decodable {
         register(DecoderProxy<T>.self)
     }
