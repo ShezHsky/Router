@@ -6,6 +6,7 @@ import RouterCore
 import XCTest
 import XCTRouter
 
+@available(macOS 11.0, *, iOS 10.0, *, tvOS 14.0, watchOS 3.2, *)
 class IntentRouteableTests: XCTestCase {
     
     func testEqualityByIntentInstance() {

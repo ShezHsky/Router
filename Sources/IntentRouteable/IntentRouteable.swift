@@ -22,6 +22,7 @@ import RouterCore
 ///     }
 /// }
 /// ```
+@available(macOS 11.0, *, iOS 10.0, *, tvOS 14.0, watchOS 3.2, *)
 open class IntentRouteable: ExternallyRepresentedRouteable<INIntent> {
     
     /// Registers a new `Routeable` for later yielding by this type.
@@ -45,6 +46,7 @@ open class IntentRouteable: ExternallyRepresentedRouteable<INIntent> {
 
 // MARK: - IntentRouteable.Proxy + ExpressibleByExternalRepresentation
 
+@available(macOS 11.0, *, iOS 10.0, *, tvOS 14.0, watchOS 3.2, *)
 extension IntentRouteable.Proxy: ExpressibleByExternalRepresentation {
     
     typealias Representation = INIntent
@@ -58,10 +60,12 @@ extension IntentRouteable.Proxy: ExpressibleByExternalRepresentation {
 
 // MARK: - IntentRouteable.Proxy + Routeable
 
+@available(macOS 11.0, *, iOS 10.0, *, tvOS 14.0, watchOS 3.2, *)
 extension IntentRouteable.Proxy: Routeable { }
 
 // MARK: - IntentRouteable.Proxy + YieldsRouteable
 
+@available(macOS 11.0, *, iOS 10.0, *, tvOS 14.0, watchOS 3.2, *)
 extension IntentRouteable.Proxy: YieldsRoutable {
     
     func yield(to recipient: YieldedRouteableRecipient) {
