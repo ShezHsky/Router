@@ -43,7 +43,7 @@ class URLRouteableTests: XCTestCase {
         let recipient = CapturingRouteableRecipient()
         routeable.recursivleyYield(to: recipient)
         
-        let expected = CreatesItselfUsingTwoParametersFromURL(context: ("Hello", 1))
+        let expected = CreatesItselfUsingTwoParametersFromURL(firstCaptureGroup: "Hello", secondCaptureGroup: 1)
         
         XCTAssertEqual(expected.eraseToAnyRouteable(), recipient.erasedRoutedContent)
     }
@@ -81,17 +81,10 @@ class URLRouteableTests: XCTestCase {
         
     }
     
-    private struct CreatesItselfUsingOneParameterFromURL: Routeable, DecodableFromURL {
+    private struct CreatesItselfUsingOneParameterFromURL: Decodable, Routeable {
         
-        typealias ComponentsDecoder = URLDecoder.RegularExpression.OneCaptureGroup<String>
-        
-        static var decoder: ComponentsDecoder {
-            do {
-                let regex = try NSRegularExpression(pattern: #"search\?q=(.*)"#, options: [.caseInsensitive])
-                return .init(regularExpression: regex)
-            } catch {
-                fatalError("Invalid regex")
-            }
+        private enum CodingKeys: String, CodingKey {
+            case context = "q"
         }
         
         var context: String
@@ -102,25 +95,19 @@ class URLRouteableTests: XCTestCase {
         
     }
     
-    private struct CreatesItselfUsingTwoParametersFromURL: Routeable, DecodableFromURL {
+    private struct CreatesItselfUsingTwoParametersFromURL: Decodable, Routeable {
         
-        typealias ComponentsDecoder = URLDecoder.RegularExpression.TwoCaptureGroups<String, Int>
-        
-        static var decoder: ComponentsDecoder {
-            do {
-                let regex = try NSRegularExpression(pattern: #"search\?q=(.*)&f=(.*)"#, options: [.caseInsensitive])
-                return .init(regularExpression: regex)
-            } catch {
-                fatalError("Invalid regex")
-            }
+        private enum CodingKeys: String, CodingKey {
+            case firstCaptureGroup = "q"
+            case secondCaptureGroup = "f"
         }
         
         var firstCaptureGroup: String
         var secondCaptureGroup: Int
         
-        init(context: (String, Int)) {
-            firstCaptureGroup = context.0
-            secondCaptureGroup = context.1
+        init(firstCaptureGroup: String, secondCaptureGroup: Int) {
+            self.firstCaptureGroup = firstCaptureGroup
+            self.secondCaptureGroup = secondCaptureGroup
         }
         
     }

@@ -1,7 +1,7 @@
 import Foundation.NSRegularExpression
 import Foundation.NSURL
 
-extension URLDecoder {
+extension URLDecoding {
     
     /// Namespace for types that decode `URL`s into other types by way of regular expressions.
     public struct RegularExpression { }
@@ -10,7 +10,7 @@ extension URLDecoder {
 
 // MARK: - One Capture Group
 
-extension URLDecoder.RegularExpression {
+extension URLDecoding.RegularExpression {
     
     /// A type that decodes `URL`s into another type, with one value parsed from the url.
     public struct OneCaptureGroup<CaptureGroup>: URLComponentsDecoder where CaptureGroup: ExpressibleByString {
@@ -49,7 +49,7 @@ extension URLDecoder.RegularExpression {
 
 // MARK: - Two Capture Groups
 
-extension URLDecoder.RegularExpression {
+extension URLDecoding.RegularExpression {
     
     /// A type that decodes `URL`s into another type, with two values parsed from the url.
     public struct TwoCaptureGroups<

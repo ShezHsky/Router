@@ -1,5 +1,6 @@
 import Foundation.NSURL
 import RouterCore
+import URLDecoder
 
 /// A `Routeable` type represented by an underlying `URL`.
 ///
@@ -29,6 +30,10 @@ open class URLRouteable: ExternallyRepresentedRouteable<URL> {
         register(Proxy<T>.self)
     }
     
+    public func registerURL<T>(_ type: T.Type) where T: Routeable & Decodable {
+        register(DecoderProxy<T>.self)
+    }
+    
     open override func failedToYieldRouteable(to recipient: YieldedRouteableRecipient) {
         recipient.receive(UnknownURLRouteable(url: representitiveValue))
     }
@@ -38,6 +43,12 @@ open class URLRouteable: ExternallyRepresentedRouteable<URL> {
     }
     
     fileprivate struct Proxy<T> where T: Routeable & ExpressibleByURL {
+        
+        let routeable: T
+        
+    }
+    
+    fileprivate struct DecoderProxy<T> where T: Decodable & Routeable {
         
         let routeable: T
         
@@ -65,6 +76,38 @@ extension URLRouteable.Proxy: Routeable { }
 // MARK: - URLRouteable.Proxy + YieldsRouteable
 
 extension URLRouteable.Proxy: YieldsRoutable {
+    
+    func yield(to recipient: YieldedRouteableRecipient) {
+        recipient.receive(routeable)
+    }
+    
+}
+
+// MARK: - URLRouteable.DecoderProxy + ExpressibleByExternalRepresentation
+
+extension URLRouteable.DecoderProxy: ExpressibleByExternalRepresentation {
+    
+    typealias Representation = URL
+    
+    init?(representitiveValue: Representation) {
+        let decoder = URLDecoder()
+        
+        do {
+            self.routeable = try decoder.decode(T.self, from: representitiveValue)
+        } catch {
+            return nil
+        }
+    }
+    
+}
+
+// MARK: - URLRouteable.DecoderProxy + Routeable
+
+extension URLRouteable.DecoderProxy: Routeable { }
+
+// MARK: - URLRouteable.DecoderProxy + YieldsRoutable
+
+extension URLRouteable.DecoderProxy: YieldsRoutable {
     
     func yield(to recipient: YieldedRouteableRecipient) {
         recipient.receive(routeable)
