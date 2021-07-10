@@ -86,7 +86,7 @@ class LoggingRouteTests: XCTestCase {
             let castedRoute = try XCTUnwrap(route as? AssertsLoggingOccursInOrder<T>, line: line)
             let castedParameter = try XCTUnwrap(parameter as? Parameter, line: line)
             
-            XCTAssertIdentical(self, castedRoute, line: line)
+            XCTAssertTrue(self === castedRoute, line: line)
             XCTAssertEqual(expectedParameter, castedParameter, line: line)
         }
         

@@ -1,4 +1,4 @@
-#if swift(>=5.3)
+#if swift(>=5.4.2)
 /// A result builder used to formulate the routing DSL.
 ///
 /// The router DSL provides a straightforward way to construct the routing system of your app in a more developer
