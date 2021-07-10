@@ -30,7 +30,6 @@ import RouterCore
 ///     }
 /// }
 /// ```
-@available(iOS 10.0, *, macOS 11.0, *, watchOS 3.2, *, tvOS 14.0, *)
 open class UserActivityRouteable {
     
     private let userActivity: NSUserActivity
@@ -60,7 +59,6 @@ open class UserActivityRouteable {
 
 // MARK: - Decoding of NSUserActivity types
 
-@available(iOS 10.0, *, macOS 11.0, *, watchOS 3.2, *, tvOS 14.0, *)
 extension UserActivityRouteable {
     
     private struct ActivityDecoder {
@@ -81,7 +79,6 @@ extension UserActivityRouteable {
 
 // MARK: - UserActivityRouteable + Routeable
 
-@available(iOS 10.0, *, macOS 11.0, *, watchOS 3.2, *, tvOS 14.0, *)
 extension UserActivityRouteable: Routeable {
     
     public static func == (lhs: UserActivityRouteable, rhs: UserActivityRouteable) -> Bool {
@@ -92,7 +89,6 @@ extension UserActivityRouteable: Routeable {
 
 // MARK: - UserActivityRouteable + YieldsRoutable
 
-@available(iOS 10.0, *, macOS 11.0, *, watchOS 3.2, *, tvOS 14.0, *)
 extension UserActivityRouteable: YieldsRoutable {
     
     public func yield(to recipient: YieldedRouteableRecipient) {

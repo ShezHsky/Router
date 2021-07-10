@@ -36,12 +36,15 @@ let package = Package(
         // Testing support for URLRouteables
         .library(name: "XCTURLRouteable", targets: ["XCTURLRouteable"])
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/ShezHsky/URLDecoder.git", .upToNextMajor(from: .init(0, 0, 1)))
+    ],
     targets: [
         .target(name: "RouterCore", dependencies: []),
         
         .target(name: "URLRouteable", dependencies: [
-            .target(name: "RouterCore")
+            .target(name: "RouterCore"),
+            .product(name: "URLDecoder", package: "URLDecoder")
         ]),
         
         .target(name: "IntentRouteable", dependencies: [

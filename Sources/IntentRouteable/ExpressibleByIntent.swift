@@ -3,7 +3,7 @@
 import Intents
 
 /// A type that can be initialized using an `INIntent`.
-@available(iOS 10.0, *, macOS 11.0, *, watchOS 3.2, *, tvOS 14.0, *)
+@available(macOS 11.0, *, iOS 10.0, *, tvOS 14.0, watchOS 3.2, *)
 public protocol ExpressibleByIntent {
     
     /// The specific type of `INIntent` this type can be initialized with.

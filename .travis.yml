@@ -1,5 +1,0 @@
-os: osx
-language: swift
-osx_image: xcode12.5
-script: bash run_tests.sh
-
