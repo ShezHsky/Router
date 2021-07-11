@@ -65,6 +65,15 @@ open class ExternallyRepresentedRouteable<ExternalRepresentation> {
         decoders.append(RegisteredDecoder(T.self))
     }
     
+    /// Registers a factory object that produces a `Routeable` at a later time on receipt of an external representation.
+    /// - Parameter factory: A factory object that is capable of transforming instances of the `ExternalRepresentation`
+    ///                      into a `Routeable`.
+    public func register<Factory>(_ factory: Factory)
+        where Factory: ExternallyRepresentedRouteableFactory, Factory.Representation == ExternalRepresentation
+    {
+        decoders.append(RegisteredDecoder(factory))
+    }
+    
     /// Performs an equality test between the receiver and another instance.
     /// - Parameter other: The `ExternallyRepresentedRouteable` to compare against
     /// - Returns: `true` if `self` and `other` are equal, `false` otherwise.
@@ -81,6 +90,14 @@ open class ExternallyRepresentedRouteable<ExternalRepresentation> {
         {
             _decode = { (representitiveValue) in
                 T(representitiveValue: representitiveValue)?.eraseToAnyRouteable()
+            }
+        }
+        
+        init<Factory>(_ factory: Factory)
+            where Factory: ExternallyRepresentedRouteableFactory, Factory.Representation == ExternalRepresentation
+        {
+            _decode = { (representitiveValue) in
+                factory.makeRouteable(for: representitiveValue)?.eraseToAnyRouteable()
             }
         }
         
