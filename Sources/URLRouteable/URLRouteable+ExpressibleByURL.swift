@@ -21,7 +21,7 @@ extension URLRouteable {
         
     }
     
-    private struct DecoderProxy<T>: ExternallyRepresentedRouteableFactory where T: Decodable & Routeable {
+    private struct DecoderProxy<T>: CanCreateRepresentedRouteable where T: Decodable & Routeable {
         
         typealias Representation = URL
         typealias RepresentedRouteable = T

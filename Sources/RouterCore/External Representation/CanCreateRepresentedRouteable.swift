@@ -1,5 +1,5 @@
 /// A type that can produce `Routeable`s from an external representation.
-public protocol ExternallyRepresentedRouteableFactory {
+public protocol CanCreateRepresentedRouteable {
     
     /// The external representation that can be used to initialize instances of the `RepresentedRouteable` type.
     associatedtype Representation

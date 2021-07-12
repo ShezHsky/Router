@@ -69,7 +69,7 @@ open class ExternallyRepresentedRouteable<ExternalRepresentation> {
     /// - Parameter factory: A factory object that is capable of transforming instances of the `ExternalRepresentation`
     ///                      into a `Routeable`.
     public func register<Factory>(_ factory: Factory)
-        where Factory: ExternallyRepresentedRouteableFactory, Factory.Representation == ExternalRepresentation
+        where Factory: CanCreateRepresentedRouteable, Factory.Representation == ExternalRepresentation
     {
         decoders.append(RegisteredDecoder(factory))
     }
@@ -94,7 +94,7 @@ open class ExternallyRepresentedRouteable<ExternalRepresentation> {
         }
         
         init<Factory>(_ factory: Factory)
-            where Factory: ExternallyRepresentedRouteableFactory, Factory.Representation == ExternalRepresentation
+            where Factory: CanCreateRepresentedRouteable, Factory.Representation == ExternalRepresentation
         {
             _decode = { (representitiveValue) in
                 factory.makeRouteable(for: representitiveValue)?.eraseToAnyRouteable()

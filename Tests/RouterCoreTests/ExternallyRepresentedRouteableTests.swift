@@ -31,7 +31,7 @@ class ExternallyRepresentedRouteableTests: XCTestCase {
         XCTAssertEqual(expected.eraseToAnyRouteable(), recipient.erasedRoutedContent)
     }
     
-    private struct FakeDecoder: ExternallyRepresentedRouteableFactory {
+    private struct FakeDecoder: CanCreateRepresentedRouteable {
         
         typealias Representation = String
         typealias RepresentedRouteable = CanDecodeFromString
