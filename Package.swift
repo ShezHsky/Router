@@ -37,7 +37,7 @@ let package = Package(
         .library(name: "XCTURLRouteable", targets: ["XCTURLRouteable"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ShezHsky/URLDecoder.git", .upToNextMajor(from: .init(0, 0, 1)))
+        .package(url: "https://github.com/ShezHsky/URLDecoder.git", .upToNextMajor(from: .init(0, 0, 2)))
     ],
     targets: [
         .target(name: "RouterCore", dependencies: []),
