@@ -22,6 +22,28 @@ class ExternallyRepresentedRouteableTests: XCTestCase {
         XCTAssertEqual(expected.eraseToAnyRouteable(), recipient.erasedRoutedContent)
     }
     
+    func testSuccessfulDecoding_CustomDecoder() {
+        let routeable = CustomDecoderRouteable("Unused, should expect the factory!")
+        let recipient = CapturingRouteableRecipient()
+        routeable.recursivleyYield(to: recipient)
+        
+        let expected = CanDecodeFromString(stringValue: "Stub!")
+        XCTAssertEqual(expected.eraseToAnyRouteable(), recipient.erasedRoutedContent)
+    }
+    
+    private struct FakeDecoder: CanCreateRepresentedRouteable {
+        
+        typealias Representation = String
+        typealias RepresentedRouteable = CanDecodeFromString
+        
+        var routeable: CanDecodeFromString
+        
+        func makeRouteable(for representation: String) -> CanDecodeFromString? {
+            routeable
+        }
+        
+    }
+    
     private class OneDecoderRouteable: ExternallyRepresentedRouteable<String> {
         
         override func registerRouteables() {
@@ -39,6 +61,18 @@ class ExternallyRepresentedRouteableTests: XCTestCase {
             
             register(CanDecodeFromString.self)
             register(CanAlsoDecodeFromString.self)
+        }
+        
+    }
+    
+    private class CustomDecoderRouteable: ExternallyRepresentedRouteable<String> {
+        
+        let customDecoder = FakeDecoder(routeable: CanDecodeFromString(stringValue: "Stub!"))
+        
+        override func registerRouteables() {
+            super.registerRouteables()
+            
+            register(customDecoder)
         }
         
     }

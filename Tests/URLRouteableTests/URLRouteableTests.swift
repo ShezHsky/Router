@@ -1,4 +1,5 @@
 import RouterCore
+import URLDecoder
 import URLRouteable
 import XCTest
 import XCTRouter
@@ -33,7 +34,7 @@ class URLRouteableTests: XCTestCase {
         let recipient = CapturingRouteableRecipient()
         routeable.recursivleyYield(to: recipient)
         
-        let expected = CreatesItselfByDecodingURL(firstCaptureGroup: "Hello", secondCaptureGroup: 1)
+        let expected = CreatesItselfByDecodingGoogleURL(firstCaptureGroup: "Hello", secondCaptureGroup: 1)
         
         XCTAssertEqual(expected.eraseToAnyRouteable(), recipient.erasedRoutedContent)
     }
@@ -49,12 +50,30 @@ class URLRouteableTests: XCTestCase {
         XCTAssertEqual(expected.eraseToAnyRouteable(), recipient.erasedRoutedContent)
     }
     
+    func testUsingCustomDecoder() throws {
+        let url = try XCTUnwrap(URL(string: "https://www.yahoo.co.uk/search?q=Hello&f=1"))
+        let routeable = TestingURLRouteable(url)
+        let recipient = CapturingRouteableRecipient()
+        routeable.recursivleyYield(to: recipient)
+        
+        let expected = CreatesItselfByDecodingYahooURL(firstCaptureGroup: "Hello", secondCaptureGroup: 1)
+        
+        XCTAssertEqual(expected.eraseToAnyRouteable(), recipient.erasedRoutedContent)
+    }
+    
     private class TestingURLRouteable: URLRouteable {
         
         override func registerRouteables() {
             super.registerRouteables()
             
-            registerURL(CreatesItselfByDecodingURL.self)
+            registerURL(CreatesItselfByDecodingGoogleURL.self, decoder: {
+                var decoder = URLDecoder()
+                decoder.urlCriteria.host = .matches("www.google.co.uk")
+                
+                return decoder
+            }())
+            
+            registerURL(CreatesItselfByDecodingYahooURL.self)
             registerURL(CreatesItselfByManuallyDecodingURL.self)
         }
         
@@ -70,7 +89,24 @@ class URLRouteableTests: XCTestCase {
         
     }
     
-    private struct CreatesItselfByDecodingURL: Decodable, Routeable {
+    private struct CreatesItselfByDecodingGoogleURL: Decodable, Routeable {
+        
+        private enum CodingKeys: String, CodingKey {
+            case firstCaptureGroup = "q"
+            case secondCaptureGroup = "f"
+        }
+        
+        var firstCaptureGroup: String
+        var secondCaptureGroup: Int
+        
+        init(firstCaptureGroup: String, secondCaptureGroup: Int) {
+            self.firstCaptureGroup = firstCaptureGroup
+            self.secondCaptureGroup = secondCaptureGroup
+        }
+        
+    }
+    
+    private struct CreatesItselfByDecodingYahooURL: Decodable, Routeable {
         
         private enum CodingKeys: String, CodingKey {
             case firstCaptureGroup = "q"
