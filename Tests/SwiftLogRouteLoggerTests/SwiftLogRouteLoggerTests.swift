@@ -22,6 +22,22 @@ class SwiftLogRouteLoggerTests: XCTestCase {
         XCTAssertEqual(expected, handler.logEvents)
     }
     
+    func testUsingCustomLogLevel() {
+        let handler = SpyLogHandler()
+        let logger = Logger(label: "Label", factory: { (_) in handler })
+        let route = DummyRoute()
+        let routeLogger = SwiftLogRouteLogger(logger: logger, level: .info)
+        let loggingRoute = route.logging(logger: routeLogger)
+        loggingRoute.route(DummyRouteable(value: "Hello, World"))
+        
+        let expected: [SpyLogHandler.Event] = [
+            .init(level: .info, message: "DummyRoute is routing DummyRouteable(value: \"Hello, World\")"),
+            .init(level: .info, message: "DummyRoute finished routing DummyRouteable(value: \"Hello, World\")")
+        ]
+        
+        XCTAssertEqual(expected, handler.logEvents)
+    }
+    
     private struct DummyRoute: Route {
         
         typealias Parameter = DummyRouteable
