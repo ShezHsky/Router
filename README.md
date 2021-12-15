@@ -2,8 +2,6 @@
 
 Describe pathways to content in your app that can be handled in response to user or external actions.
 
-[![Build Status](https://travis-ci.com/ShezHsky/Router.svg?branch=main)](https://travis-ci.com/ShezHsky/Router)
-
 ## Overview
 
 Users navigate to parts of your app in order to execute tasks or consume content. These navigation pathways are often repeated as the complexity of your app grows, as users expect to be shown the same content in response to scanning a QR code, NFC tag, Safari deep link, among others.
