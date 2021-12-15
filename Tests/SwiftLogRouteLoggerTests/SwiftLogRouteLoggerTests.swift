@@ -10,8 +10,7 @@ class SwiftLogRouteLoggerTests: XCTestCase {
         let handler = SpyLogHandler()
         let logger = Logger(label: "Label", factory: { (_) in handler })
         let route = DummyRoute()
-        let routeLogger = SwiftLogRouteLogger(logger: logger)
-        let loggingRoute = route.logging(logger: routeLogger)
+        let loggingRoute = route.logging(logger: logger)
         loggingRoute.route(DummyRouteable(value: "Hello, World"))
         
         let expected: [SpyLogHandler.Event] = [
@@ -26,8 +25,7 @@ class SwiftLogRouteLoggerTests: XCTestCase {
         let handler = SpyLogHandler()
         let logger = Logger(label: "Label", factory: { (_) in handler })
         let route = DummyRoute()
-        let routeLogger = SwiftLogRouteLogger(logger: logger, level: .info)
-        let loggingRoute = route.logging(logger: routeLogger)
+        let loggingRoute = route.logging(logger: logger, level: .info)
         loggingRoute.route(DummyRouteable(value: "Hello, World"))
         
         let expected: [SpyLogHandler.Event] = [
