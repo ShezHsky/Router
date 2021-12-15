@@ -18,6 +18,9 @@ let package = Package(
         // Just core routing types and responsibilities
         .library(name: "RouterCore", targets: ["RouterCore"]),
         
+        // swift-log RouteLogger implementation
+        .library(name: "SwiftLogRouteLogger", targets: ["SwiftLogRouteLogger"]),
+        
         // Interpolation of URLs into Routeables
         .library(name: "URLRouteable", targets: ["URLRouteable"]),
         
@@ -37,10 +40,16 @@ let package = Package(
         .library(name: "XCTURLRouteable", targets: ["XCTURLRouteable"])
     ],
     dependencies: [
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
         .package(url: "https://github.com/ShezHsky/URLDecoder.git", .upToNextMajor(from: .init(0, 0, 2)))
     ],
     targets: [
         .target(name: "RouterCore", dependencies: []),
+        
+        .target(name: "SwiftLogRouteLogger", dependencies: [
+            .target(name: "RouterCore"),
+            .product(name: "Logging", package: "swift-log")
+        ]),
         
         .target(name: "URLRouteable", dependencies: [
             .target(name: "RouterCore"),
@@ -72,6 +81,11 @@ let package = Package(
         
         .testTarget(name: "RouterCoreTests", dependencies: [
             .target(name: "RouterCore"),
+            .target(name: "XCTRouter")
+        ]),
+        
+        .testTarget(name: "SwiftLogRouteLoggerTests", dependencies: [
+            .target(name: "SwiftLogRouteLogger"),
             .target(name: "XCTRouter")
         ]),
         
