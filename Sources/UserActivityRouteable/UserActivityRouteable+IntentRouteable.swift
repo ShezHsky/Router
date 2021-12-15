@@ -1,7 +1,7 @@
 import IntentRouteable
 import RouterCore
 
-@available(macOS 11.0, *, iOS 10.0, *, tvOS 14.0, watchOS 3.2, *)
+@available(macOS 12.0, *, iOS 10.0, *, tvOS 14.0, watchOS 3.2, *)
 extension UserActivityRouteable {
     
     /// Registers an `IntentRouteable` for later yielding by this type.
@@ -10,7 +10,6 @@ extension UserActivityRouteable {
     /// backed by an intent.
     ///
     /// - Parameter type: The type of `IntentRouteable` that will be used to attempt decoding of incoming activites.
-    @available(macOS, unavailable)
     public func register<R>(_ type: R.Type) where R: IntentRouteable {
         register { (userActivity) in
             guard let intent = userActivity.interaction?.intent else { return nil }
