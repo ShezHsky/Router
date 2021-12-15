@@ -9,6 +9,7 @@ let package = Package(
         // The full Router package
         .library(name: "Router", targets: [
             "RouterCore",
+            "SwiftLogRouteLogger",
             "URLRouteable",
             "IntentRouteable",
             "UserActivityRouteable",
