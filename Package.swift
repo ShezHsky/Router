@@ -41,7 +41,7 @@ let package = Package(
         .library(name: "XCTURLRouteable", targets: ["XCTURLRouteable"])
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
+        .package(url: "https://github.com/apple/swift-log.git", .upToNextMajor(from: .init(1, 0, 0))),
         .package(url: "https://github.com/ShezHsky/URLDecoder.git", .upToNextMajor(from: .init(0, 0, 2)))
     ],
     targets: [
