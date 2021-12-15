@@ -3,7 +3,7 @@
 /// In your app, most if not all `Route`s will likely either:
 ///
 /// - Present a view controller or adjust the presentation of a view
-/// - Adjust the model used by a SwiftUI
+/// - Adjust the model used by a SwiftUI view
 ///
 /// However `Route`s are not limited to presentation behaviour - they may be used to process events or action other
 /// non user-facing behaviour.
